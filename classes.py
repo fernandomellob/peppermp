@@ -11,7 +11,7 @@ class Player:
   def Play_musica(play_musica):
     return 0
 
-  def Reset_musica(reset_musica)
+  def Reset_musica(reset_musica):
     return 0
 
   def Altera_velocidade(velocidade_musica):
@@ -108,7 +108,6 @@ class Notas:
 
 #Clase para selecionar o caso em que a nota tocada deve ser a anterior
 class NotasRepetidas(Notas):
-    __TOMTELEFONE = 84
     __NOTAS = [Notas.CaractereLa, Notas.CaractereSi, Notas.CaractereDo, Notas.CaractereRe, Notas.CaractereMi, Notas.CaractereFa, Notas.CaractereSol]
 
     def verifUltimoCharNota(self, caractereMusica):
@@ -118,7 +117,7 @@ class NotasRepetidas(Notas):
             return False    
     
     def getNota(self, caractereMusica):
-        match caractereMusica:
+        match caractereMusica.upper():
             case self.CaractereDo:
                 return self.DO
             case self.CaractereRe:
@@ -133,8 +132,7 @@ class NotasRepetidas(Notas):
                 return self.LA
             case self.CaractereSi:                    
                 return self.SI
-            case _:
-                return self.__TOMTELEFONE
+    
 
 # Classe para selecionar as notas                 
 class NotasBasicas(Notas):
@@ -142,7 +140,7 @@ class NotasBasicas(Notas):
     CaractereSemSom = " "
 
     def getNota(self, caractereMusica):
-        match caractereMusica:
+        match caractereMusica.upper():
             case self.CaractereDo:
                 return self.DO
             case self.CaractereRe:
@@ -212,7 +210,9 @@ class Musica:
     __BPMBASE = 120
     __VOLUMEBASE = 50
     __VOLUMEMAX = 127
-
+    __TELEFONE = 124
+    __NOTAMAX = 127
+    __NOTAMIN = 0
     notaBase = NotasBasicas("ABCDEFG ")
     notaAleatoria = NotaAleatoria("?")
     notaRepetida = NotasRepetidas("OIU")
@@ -235,12 +235,15 @@ class Musica:
     #Adiciona a nota e corrige o tempo
     def adicionarNota(self, numeroNota):
         self.midi.addNote(self.__TRACK, self.__CANAL, numeroNota + self.tom,  self.tempo_musica, self.__DURACAO, self.volume)
-        self.tempo_musica += 1
+        self.tempo_musica = self.tempo_musica + 1
   
     #Função para adicionar o som do telefone, que nao encontrei como fazer
     def adicionarTelefone(self):
-        self.midi.addNote(self.__TRACK, self.__CANAL, 84,  self.tempo_musica, self.__DURACAO, self.volume)
-    
+        instrumentoAnterior = self.instrumento
+        self.alteraInstrumento(self.__TELEFONE)
+        self.adicionarNota(random.randint(self.__NOTAMIN, self.__NOTAMAX))
+        self.alteraInstrumento(instrumentoAnterior)
+
     def alteraVolume(self, novoVolume):
         self.volume = novoVolume
 
@@ -254,14 +257,13 @@ class Musica:
     def alteraInstrumento(self, novoInstrumento):
         self.instrumento = novoInstrumento
         self.midi.addProgramChange(self.__TRACK, self.__CANAL,  self.tempo_musica, self.instrumento)
-        
+
     def criarMusica(self, stringNotas):
 
         self.midi.addTempo(self.__TRACK, 0 , self.bpm)
         caracteresParaPular = 0
 
         for i, caractere in enumerate(stringNotas):
-
             if caracteresParaPular > 0:
                 caracteresParaPular = caracteresParaPular - 1     
 
@@ -292,7 +294,7 @@ class Musica:
                 self.alteraInstrumento(Instrumentos.getInstrumentos())
             
             elif BPM.ehCaractere(caractere):
-                self.alteraBPM(BPM.setBPM)
+                self.alteraBPM(BPM.setBPM())
             
             ultimoCaractere = caractere
 
@@ -312,3 +314,8 @@ def tocar_musica(midi_file):
         print("Pygame error:", e)
 
   
+teste = Musica()
+
+teste.criarMusica("AUUA")
+tocar_musica("output.mid")
+time.sleep(5)
