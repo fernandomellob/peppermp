@@ -1,19 +1,5 @@
 import tkinter as tk
-
-def button1_click():
-    text_field.insert(tk.END, "Button 1 clicked\n")
-
-def button2_click():
-    text_field.insert(tk.END, "Button 2 clicked\n")
-
-def button3_click():
-    text_field.insert(tk.END, "Button 3 clicked\n")
-
-def button4_click():
-    text_field.insert(tk.END, "Button 4 clicked\n")
-
-def button5_click():
-    text_field.insert(tk.END, "Button 5 clicked\n")
+import actions as actions
 
 # Create the main window
 window = tk.Tk(className="Pepper MP")
@@ -39,20 +25,24 @@ frameButtons = tk.Frame(window)
 frameButtons.grid(row=1, column=1, padx=5, pady=5)
 
 # Create five buttons
-playButton = tk.Button(frameButtons, text="▶", command=button1_click, width=2, height=1)
+text = text_field.get("1.0",'end-1c')
+playButton = tk.Button(frameButtons, text="▶", command=lambda: actions.play(text_field.get("1.0","end")), width=2, height=1)
 playButton.grid(row=2, column=0, padx=5, pady=5)
 
-resetButton = tk.Button(frameButtons, text="⏺️", command=button2_click, width=2, height=1)
+resetButton = tk.Button(frameButtons, text="⏺️", command=actions.reset, width=2, height=1)
 resetButton.grid(row=2, column=1, padx=5, pady=5)
 
-doisxButton = tk.Button(frameButtons, text="2x", command=button3_click, width=2, height=1)
+doisxButton = tk.Button(frameButtons, text="2x", command=actions.doisX, width=2, height=1)
 doisxButton.grid(row=2, column=2, padx=5, pady=5)
 
-oitavaButton = tk.Button(frameButtons, text="#", command=button3_click, width=2, height=1)
+oitavaButton = tk.Button(frameButtons, text="#", command=actions.oitava, width=2, height=1)
 oitavaButton.grid(row=2, column=3, padx=5, pady=5)
 
-ajudaButton = tk.Button(frameButtons, text="?", command=button3_click, width=2, height=1)
+ajudaButton = tk.Button(frameButtons, text="?", command=actions.ajuda, width=2, height=1)
 ajudaButton.grid(row=2, column=4, padx=5, pady=5)
+
+salvarMidiButton = tk.Button(frameButtons, text="⬇", command=lambda: actions.salvarMidi(text_field.get("1.0","end")), width=2, height=1)
+salvarMidiButton.grid(row=2, column=5, padx=5, pady=5)
 
 # Start the main loop
 window.mainloop()
