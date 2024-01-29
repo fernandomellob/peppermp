@@ -11,7 +11,7 @@ def reset():
 def ajuda():
     functions.mensagemAjuda()
 
-def salvarMidi(text):
-    musica = functions.Musica()
+def salvarMidi(text,volume, oitava, doisx):
+    musica = functions.Musica(volume, oitava, doisx)
     musica.criarMusica(text)
 
