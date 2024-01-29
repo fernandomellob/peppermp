@@ -2,38 +2,7 @@ import time
 import pygame
 import random
 from midiutil import MIDIFile
-
-
-class Player:
-  def Converter(musica):
-    return 0
-
-  def Play_musica(play_musica):
-    return 0
-
-  def Reset_musica(reset_musica):
-    return 0
-
-  def Altera_velocidade(velocidade_musica):
-    return 0
-
-  def esta_tocando():
-    return 0
-
-  def esta_parada():
-    return 0
-
-  def esta_acelarada():
-    return 0
-
-  def esta_tom_acelerado():
-    return 0
-
-class CampoDeTexto:
-  def Altera_texto(texto):
-    return 0
-  def get_texto():
-    return 0
+import tkinter.messagebox as mb
 
 #Métodos para tratar os casos de string que mudam o tom da musica
 class StringOitava:
@@ -45,7 +14,7 @@ class StringOitava:
     __MAXTOM = 3 * __OITAVA
 
     @staticmethod
-    def ehString( stringMusica, i):
+    def cmpString( stringMusica, i):
         if i + 1 < len(stringMusica) and stringMusica[i: i + 1] == StringOitava.__CHARFIXO and stringMusica[i + 1] in StringOitava.__CARACTERESEFEITO:
              return True
         else:
@@ -72,7 +41,7 @@ class StringBPM():
     __INCREMENTOBPM = 80
 
     @staticmethod
-    def ehString(stringMusica, i):
+    def cmpString(stringMusica, i):
         if stringMusica[i: i + len(StringBPM.__STRINGFIXA)] == StringBPM.__STRINGFIXA:
              return True
         else:
@@ -103,7 +72,7 @@ class Notas:
 
     def __init__(self, caracteresEfeito):
         self.caracteresEfeito = caracteresEfeito
-    def ehCaractere(self, caractereMusica):
+    def verificarCaractereConjunto(self, caractereMusica):
          return caractereMusica.lower() in self.caracteresEfeito.lower()
 
 #Clase para selecionar o caso em que a nota tocada deve ser a anterior
@@ -169,7 +138,7 @@ class Volume():
     __DIMINUIRVOLUME = '-'
 
     @staticmethod
-    def ehCaractere(caractereMusica):
+    def verificarCaractereConjunto(caractereMusica):
          return caractereMusica in [Volume.__AUMENTARVOLUME, Volume.__DIMINUIRVOLUME]
     @staticmethod
     def setVolume(caractereVolume, volume, volumePadrao, volumeMax):
@@ -185,7 +154,7 @@ class Volume():
 class Instrumentos():
 
     @staticmethod
-    def ehCaractere(caractereMusica):
+    def verificarCaractereConjunto(caractereMusica):
          return caractereMusica == "\n"   
     
     @staticmethod
@@ -194,7 +163,7 @@ class Instrumentos():
 
 class BPM():
     @staticmethod
-    def ehCaractere(caractereMusica):
+    def verificarCaractereConjunto(caractereMusica):
          return caractereMusica == ";" 
     
     @staticmethod
@@ -277,33 +246,33 @@ class Musica:
             if caracteresParaPular > 0:
                 caracteresParaPular = caracteresParaPular - 1     
 
-            elif StringBPM.ehString(stringNotas, i):
+            elif StringBPM.cmpString(stringNotas, i):
                 self.alteraBPM(StringBPM.setBPM(self.bpm))
                 caracteresParaPular = 3
 
-            elif StringOitava.ehString(stringNotas, i):
+            elif StringOitava.cmpString(stringNotas, i):
                 self.alteraTom(StringOitava.setOitava(self.tom, stringNotas, i))
                 caracteresParaPular = 1
 
-            elif self.notaRepetida.ehCaractere(caractere):
+            elif self.notaRepetida.verificarCaractereConjunto(caractere):
                 if self.notaRepetida.verifUltimoCharNota(ultimoCaractere) == True: 
                     self.adicionarNota(self.notaRepetida.getNota(ultimoCaractere))
                 else:
                     self.adicionarTelefone()
 
-            elif self.notaBase.ehCaractere(caractere):
+            elif self.notaBase.verificarCaractereConjunto(caractere):
                 self.adicionarNota(self.notaBase.getNota(caractere))
 
-            elif self.notaAleatoria.ehCaractere(caractere):
+            elif self.notaAleatoria.verificarCaractereConjunto(caractere):
                 self.adicionarNota(self.notaAleatoria.getNota())      
 
-            elif Volume.ehCaractere(caractere):
+            elif Volume.verificarCaractereConjunto(caractere):
                 self.alteraVolume(Volume.setVolume(caractere, self.volume, self.__VOLUMEBASE, self.__VOLUMEMAX))
             
-            elif Instrumentos.ehCaractere(caractere):
+            elif Instrumentos.verificarCaractereConjunto(caractere):
                 self.alteraInstrumento(Instrumentos.getInstrumentos())
             
-            elif BPM.ehCaractere(caractere):
+            elif BPM.verificarCaractereConjunto(caractere):
                 self.alteraBPM(BPM.setBPM())
             
             ultimoCaractere = caractere
@@ -311,16 +280,23 @@ class Musica:
         self.criarArquivoMidi()
 
 
-def tocar_musica(midi_file):
-    #Funcao para tocar o arquivo
-    pygame.init()
-    pygame.mixer.init()
 
-    try:
-        pygame.mixer.music.load(midi_file)
-        pygame.mixer.music.play() 
-    except pygame.error as e:
-        print("Pygame error:", e)
+class Player:
+    @staticmethod
+    def tocarMusica(midi_file):
+        #Funcao para tocar o arquivo
+        pygame.init()
+        pygame.mixer.init()
 
-  
+        try:
+            pygame.mixer.music.load(midi_file)
+            pygame.mixer.music.play() 
+        except pygame.error as e:
+            print("Pygame error:", e)
+    @staticmethod
+    def pararMusica():
+        pygame.mixer.music.stop()
+    
 
+def mensagemAjuda():
+    mb.showinfo("Ajuda", "O campo de texto serve para você digitar a música que deseja tocar.\n\nO botão ▶ serve para tocar a música.\n\nO botão ⏺️ serve para parar a música.\n\nO checkbox 2x serve para tocar a música duas vezes mais rápido.\n\nO checkbox +# serve para tocar a música uma oitava acima.\n\nO botão ? serve para mostrar essa mensagem de ajuda.\n\nO botão ⬇ serve para salvar a música em um arquivo midi.")
