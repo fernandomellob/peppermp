@@ -74,7 +74,7 @@ ajudaButton = tk.Button(frameButtons, text="?", command=actions.ajuda, width=2, 
 ajudaButton.grid(row=2, column=2, padx=5, pady=5)
 ajudaButton.configure(bg='orange')
 
-salvarMidiButton = tk.Button(frameButtons, text="⬇", command=lambda: actions.salvarMidi(text_field.get("1.0","end")), width=2, height=1)
+salvarMidiButton = tk.Button(frameButtons, text="⬇", command=lambda: actions.salvarMidi(text_field.get("1.0","end"),volume.get(),oitava_state.get(),doisx_state.get()), width=2, height=1)
 salvarMidiButton.grid(row=2, column=3, padx=5, pady=5)
 salvarMidiButton.configure(bg='#0097FF')
 
