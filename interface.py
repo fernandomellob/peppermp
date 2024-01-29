@@ -18,6 +18,7 @@ text_field.grid(row=1, padx=5, pady=5)
 
 # Volume
 volume = tk.Scale(frameText_Field, from_=0, to=100, orient=tk.HORIZONTAL, length=200)
+volume.set(50)
 volume.grid(row=2, padx=5, pady=5)
 
 # Frame para os botões
@@ -26,16 +27,18 @@ frameButtons.grid(row=1, column=1, padx=5, pady=5)
 
 # Create five buttons
 text = text_field.get("1.0",'end-1c')
-playButton = tk.Button(frameButtons, text="▶", command=lambda: actions.play(text_field.get("1.0","end")), width=2, height=1)
+playButton = tk.Button(frameButtons, text="▶", command=lambda: actions.play(text_field.get("1.0","end"),volume.get(),oitava_state.get(),doisx_state.get()), width=2, height=1)
 playButton.grid(row=2, column=0, padx=5, pady=5)
 
 resetButton = tk.Button(frameButtons, text="⏺️", command=actions.reset, width=2, height=1)
 resetButton.grid(row=2, column=1, padx=5, pady=5)
 
-doisxButton = tk.Button(frameButtons, text="2x", command=actions.doisX, width=2, height=1)
+doisx_state = tk.BooleanVar()
+doisxButton = tk.Checkbutton(frameButtons, text="2x", variable = doisx_state, width=2, height=1, onvalue = True, offvalue= False)
 doisxButton.grid(row=2, column=2, padx=5, pady=5)
 
-oitavaButton = tk.Button(frameButtons, text="#", command=actions.oitava, width=2, height=1)
+oitava_state = tk.BooleanVar()
+oitavaButton = tk.Checkbutton(frameButtons, text="+#", variable = oitava_state, width=2, height=1, onvalue = True, offvalue= False)
 oitavaButton.grid(row=2, column=3, padx=5, pady=5)
 
 ajudaButton = tk.Button(frameButtons, text="?", command=actions.ajuda, width=2, height=1)
