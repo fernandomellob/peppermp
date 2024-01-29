@@ -137,7 +137,7 @@ class NotasRepetidas(Notas):
 # Classe para selecionar as notas                 
 class NotasBasicas(Notas):
     __SEMSOM = 128
-    CaractereSemSom = " "
+    __CaractereSemSom = " "
 
     def getNota(self, caractereMusica):
         match caractereMusica.upper():
@@ -155,7 +155,7 @@ class NotasBasicas(Notas):
                 return self.LA
             case self.CaractereSi:
                 return self.SI
-            case " ":
+            case self.__CaractereSemSom:
                 return self.__SEMSOM  
 
 # Classe para selecionar as notas aleatórias da música
@@ -213,17 +213,27 @@ class Musica:
     __TELEFONE = 124
     __NOTAMAX = 127
     __NOTAMIN = 0
+    __OITAVA = 12
     notaBase = NotasBasicas("ABCDEFG ")
     notaAleatoria = NotaAleatoria("?")
     notaRepetida = NotasRepetidas("OIU")
 
-    def __init__(self):
+    def __init__(self, volumeInicial, estadoOitava, estado2x):
         self.midi = MIDIFile(1)
-        self.bpm = self.__BPMBASE
-        self.volume = self.__VOLUMEBASE
+        self.volume = volumeInicial
         self.tempo_musica = 0
-        self.tom = 0
         self.instrumento = 0
+
+        if estadoOitava == True:
+            self.tom = self.__OITAVA
+        else:
+            self.tom = 0
+
+        if estado2x == True:
+            self.bpm = self.__BPMBASE * 2
+        else:
+            self.bpm = self.__BPMBASE
+
        
     #Salva arquivo
     def criarArquivoMidi(self):
@@ -308,14 +318,9 @@ def tocar_musica(midi_file):
 
     try:
         pygame.mixer.music.load(midi_file)
-        pygame.mixer.music.play()
-        pygame.event.wait()
+        pygame.mixer.music.play() 
     except pygame.error as e:
         print("Pygame error:", e)
 
   
-teste = Musica()
 
-teste.criarMusica("AUUA")
-tocar_musica("output.mid")
-time.sleep(5)
