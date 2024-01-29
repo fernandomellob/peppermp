@@ -1,19 +1,15 @@
 import functions
+import pygame
 
-def play(text):
-    musica = functions.Musica()
+def play(text,volume,oitava,doisx):
+    musica = functions.Musica(volume, oitava, doisx)
     musica.criarMusica(text)
     functions.tocar_musica("output.mid")
     print("play")
 
 def reset():
+    pygame.mixer.music.stop()
     print("reset")
-
-def doisX():
-    print("2X")
-
-def oitava():
-    print("#")
 
 def ajuda():
     print("?")
