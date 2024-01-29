@@ -33,19 +33,19 @@ playButton.grid(row=2, column=0, padx=5, pady=5)
 resetButton = tk.Button(frameButtons, text="⏺️", command=actions.reset, width=2, height=1)
 resetButton.grid(row=2, column=1, padx=5, pady=5)
 
+ajudaButton = tk.Button(frameButtons, text="?", command=actions.ajuda, width=2, height=1)
+ajudaButton.grid(row=2, column=2, padx=5, pady=5)
+
+salvarMidiButton = tk.Button(frameButtons, text="⬇", command=lambda: actions.salvarMidi(text_field.get("1.0","end")), width=2, height=1)
+salvarMidiButton.grid(row=2, column=3, padx=5, pady=5)
+
 doisx_state = tk.BooleanVar()
 doisxButton = tk.Checkbutton(frameButtons, text="2x", variable = doisx_state, width=2, height=1, onvalue = True, offvalue= False)
-doisxButton.grid(row=2, column=2, padx=5, pady=5)
+doisxButton.grid(row=2, column=4, padx=5, pady=5)
 
 oitava_state = tk.BooleanVar()
 oitavaButton = tk.Checkbutton(frameButtons, text="+#", variable = oitava_state, width=2, height=1, onvalue = True, offvalue= False)
-oitavaButton.grid(row=2, column=3, padx=5, pady=5)
-
-ajudaButton = tk.Button(frameButtons, text="?", command=actions.ajuda, width=2, height=1)
-ajudaButton.grid(row=2, column=4, padx=5, pady=5)
-
-salvarMidiButton = tk.Button(frameButtons, text="⬇", command=lambda: actions.salvarMidi(text_field.get("1.0","end")), width=2, height=1)
-salvarMidiButton.grid(row=2, column=5, padx=5, pady=5)
+oitavaButton.grid(row=2, column=5, padx=5, pady=5)
 
 # Start the main loop
 window.mainloop()
