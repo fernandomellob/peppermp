@@ -90,7 +90,7 @@ oitavaButton.configure(bg='grey')
 
 
 # Carregando e redimensionando a imagem do logotipo
-image = Image.open(r"C:\Users\bener\pimenta\FinalTrabapimenta\logo.png")
+image = Image.open(r"logo.png")
 image = image.resize((80 , 80), Image.Resampling.LANCZOS)
 photo = ImageTk.PhotoImage(image)
 
