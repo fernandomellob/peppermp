@@ -21,7 +21,7 @@ class StringOitava:
             return False
         
     @staticmethod
-    def setOitava(self, tomAtual, stringMusica, i):
+    def setOitava(tomAtual, stringMusica, i):
         caractere = stringMusica[i + 1]
         match caractere:
             case "+":       
